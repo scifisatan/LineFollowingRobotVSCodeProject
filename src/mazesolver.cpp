@@ -1,8 +1,8 @@
 /*
    Line sensor on A0,A1,A2,A3,A4,A5,A6
    A0-left & A6 - right
-
 */
+
 #include <Arduino.h>
 #include <L298N.h>
 

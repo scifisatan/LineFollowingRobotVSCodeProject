@@ -1,3 +1,8 @@
+/*
+   Line sensor on A0,A1,A2,A3,A4,A5,A6
+   A0-left & A6 - right
+*/
+
 #include <Arduino.h>
 #include <L298N.h>
 
@@ -24,16 +29,6 @@ bool brakeEnabled = 0;
 #define BIN2 8
 #define PWMA 3
 #define PWMB 9
-
-// these constants are used to allow you to make your motor configuration
-// line up with function names like forward. Value can be 1 or -1
-const int offsetA = 1;
-const int offsetB = 1;
-
-// Initializing motors. The library will allow you to initialize as many
-// motors as you have memory for. If you are using functions like forward
-// that take 2 motors as arguements you can either write new functions or
-// call the function more than once.
 
 L298N motor1(AIN1, AIN2, PWMA);
 L298N motor2(BIN1, BIN2, PWMB);
