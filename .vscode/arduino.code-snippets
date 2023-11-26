@@ -1,0 +1,38 @@
+{
+	// Place your snippets for cpp here. Each snippet is defined under a snippet name and has a prefix, body and 
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+	// same ids are connected.
+	// Example:
+	"Initialize Arduino Project": {
+		"prefix": "init",
+		"body": [
+			"#include <Arduino.h>",
+			"#include <MOTORS.h>",
+			"#include <ARRAY.h>",
+			"#include <PID.h>",
+			"// PID constants".
+			"float Kp = 0.8;",
+			"float Kd = 0;"
+			"float Ki = 0;",
+			"",
+			"MOTORS motors(3, 5, 6, 7, 8, 9);",
+			"",
+			"ARRAY array(A0, A1, A2, A3, A4);",
+			"",
+			"PID pid(Kp, Ki, Kd);",
+			"",
+			"void setup() {",
+			"  // put your setup code here, to run once:",
+			"",
+			"}",
+			"",
+			"void loop() {",
+			"  // put your main code here, to run repeatedly:",
+			"",
+			"}"
+		],
+		"description": "Initialize Arduino Project"
+
+	},
+}
