@@ -1,5 +1,5 @@
 // Required Libraries
-#include <L298NX2.h>
+#include <MOTORS.h>
 
 // Define motor control pins
 // Left motor
@@ -20,7 +20,7 @@ const unsigned int white = 1;
 const unsigned int turning_speed = 70;
 
 // Initialize both motors
-L298NX2 motors(EN_A, IN1_A, IN2_A, EN_B, IN1_B, IN2_B);
+MOTORS motors(EN_A, IN1_A, IN2_A, EN_B, IN1_B, IN2_B);
 
 void setup() {
   // Set up serial communication
@@ -31,24 +31,13 @@ void setup() {
     // Do nothing
   }
 
-  // Set up motor control pins
-  pinMode(EN_A, OUTPUT);
-  pinMode(IN1_A, OUTPUT);
-  pinMode(IN2_A, OUTPUT);
-  pinMode(EN_B, OUTPUT);
-  pinMode(IN1_B, OUTPUT);
-  pinMode(IN2_B, OUTPUT);
-
   // Set up sensor pins
-  pinMode(A1, INPUT);  // Extreme left sensor
-  pinMode(A2, INPUT);  // Left sensor
-  pinMode(A3, INPUT);  // Middle sensor
-  pinMode(A4, INPUT);  // Right sensor
-  pinMode(A5, INPUT);  // Extreme right sensor
+  pinMode(A0, INPUT);  // Extreme left sensor
+  pinMode(A1, INPUT);  // Left sensor
+  pinMode(A2, INPUT);  // Middle sensor
+  pinMode(A3, INPUT);  // Right sensor
+  pinMode(A4, INPUT);  // Extreme right sensor
 
-  // Set initial motor speeds
-  motors.setSpeedA(100);
-  motors.setSpeedB(100);
 }
 
 // Function to check if a sensor is on black
@@ -59,30 +48,6 @@ bool isBlack(int sensor) {
 // Function to check if a sensor is on white
 bool isWhite(int sensor) {
   return (sensor == white);
-}
-
-// Function to turn left
-void turnLeft() {
-  motors.setSpeedA(turning_speed / 1.5);  // Reduce the speed of motor A (left motor)
-  motors.setSpeedB(turning_speed);        // Keep the speed of motor B (right motor)
-  motors.backwardA();                     // Run motor A (left motor) backward
-  motors.forwardB();                      // Run motor B (right motor) forward
-}
-
-// Function to turn right
-void turnRight() {
-  motors.setSpeedA(turning_speed);        // Keep the speed of motor A (left motor)
-  motors.setSpeedB(turning_speed / 1.5);  // Reduce the speed of motor B (right motor)
-  motors.forwardA();                      // Run motor A (left motor) forward
-  motors.backwardB();                     // Run motor B (right motor) backward
-}
-
-// Function to turn in a circle
-void turnCircle() {
-  motors.setSpeedA(turning_speed);  // Keep the speed of motor A (left motor)
-  motors.setSpeedB(turning_speed);  // Keep the speed of motor B (right motor)
-  motors.forwardA();                // Run motor A (left motor) forward
-  motors.backwardB();               // Run motor B (right motor) backward
 }
 
 void printInfo(int sensor1, int sensor2, int sensor3, int sensor4, int sensor5) {

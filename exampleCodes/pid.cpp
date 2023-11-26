@@ -52,6 +52,22 @@ void setup()
     cbi(ADCSRA, ADPS0);
 
     Serial.begin(9600);
+
+    // Set up motor control pins
+    pinMode(PWMA, OUTPUT);
+    pinMode(AIN1, OUTPUT);
+    pinMode(AIN2, OUTPUT);
+    pinMode(PWMB, OUTPUT);
+    pinMode(BIN1, OUTPUT);
+    pinMode(BIN2, OUTPUT);
+
+    // Set up sensor pins
+    pinMode(A1, INPUT); // Extreme left sensor
+    pinMode(A2, INPUT); // Left sensor
+    pinMode(A3, INPUT); // Middle sensor
+    pinMode(A4, INPUT); // Right sensor
+    pinMode(A5, INPUT); // Extreme right sensor
+
     pinMode(11, INPUT_PULLUP);
     pinMode(12, INPUT_PULLUP);
     pinMode(13, OUTPUT);
@@ -102,49 +118,22 @@ void calibrate()
         motor2.setSpeed(70);
         motor2.backward();
 
-        if (analogRead(A1) < minValues[1])
-        {
-            minValues[1] = analogRead(A1);
-        }
-        if (analogRead(1) > maxValues[1])
-        {
-            maxValues[1] = analogRead(A1);
-        }
+        int analogPins[] = {A1, A2, A3, A4, A5};
+        int numPins = sizeof(analogPins) / sizeof(analogPins[0]);
 
-        if (analogRead(A2) < minValues[2])
+        for (int i = 0; i < numPins; i++)
         {
-            minValues[2] = analogRead(A2);
-        }
-        if (analogRead(2) > maxValues[2])
-        {
-            maxValues[2] = analogRead(A2);
-        }
+            int readValue = analogRead(analogPins[i]);
 
-        if (analogRead(A3) < minValues[3])
-        {
-            minValues[2] = analogRead(A2);
-        }
-        if (analogRead(3) > maxValues[3])
-        {
-            maxValues[3] = analogRead(A3);
-        }
+            if (readValue < minValues[i + 1])
+            {
+                minValues[i + 1] = readValue;
+            }
 
-        if (analogRead(A4) < minValues[4])
-        {
-            minValues[4] = analogRead(A4);
-        }
-        if (analogRead(4) > maxValues[4])
-        {
-            maxValues[4] = analogRead(A4);
-        }
-
-        if (analogRead(A5) < minValues[5])
-        {
-            minValues[5] = analogRead(A5);
-        }
-        if (analogRead(5) > maxValues[5])
-        {
-            maxValues[5] = analogRead(A5);
+            if (readValue > maxValues[i + 1])
+            {
+                maxValues[i + 1] = readValue;
+            }
         }
     }
 
@@ -155,54 +144,29 @@ void calibrate()
         Serial.print(" ");
     }
     Serial.println();
-
-    motor1.stop();
-    motor2.stop();
+    motors.stop();
 }
 
 void readLine()
 {
     onLine = 0;
+    int analogPins[] = {A1, A2, A3, A4, A5};
+    int numPins = sizeof(analogPins) / sizeof(analogPins[0]);
 
-    sensorValue[1] = map(analogRead(A1), minValues[1], maxValues[1], 0, 1000);
-    sensorValue[1] = constrain(sensorValue[1], 0, 1000);
-    if (isBlackLine == 1 && sensorValue[1] > 700)
-        onLine = 1;
-    if (isBlackLine == 0 && sensorValue[1] < 700)
-        onLine = 1;
+    for (int i = 0; i < numPins; i++)
+    {
+        sensorValue[i + 1] = map(analogRead(analogPins[i]), minValues[i + 1], maxValues[i + 1], 0, 1000);
+        sensorValue[i + 1] = constrain(sensorValue[i + 1], 0, 1000);
 
-    sensorValue[2] = map(analogRead(A2), minValues[2], maxValues[2], 0, 1000);
-    sensorValue[2] = constrain(sensorValue[2], 0, 1000);
-    if (isBlackLine == 1 && sensorValue[2] > 700)
-        onLine = 1;
-    if (isBlackLine == 0 && sensorValue[2] < 700)
-        onLine = 1;
-
-    sensorValue[3] = map(analogRead(A3), minValues[3], maxValues[3], 0, 1000);
-    sensorValue[3] = constrain(sensorValue[3], 0, 1000);
-    if (isBlackLine == 1 && sensorValue[3] > 700)
-        onLine = 1;
-    if (isBlackLine == 0 && sensorValue[3] < 700)
-        onLine = 1;
-
-    sensorValue[4] = map(analogRead(A4), minValues[4], maxValues[4], 0, 1000);
-    sensorValue[4] = constrain(sensorValue[4], 0, 1000);
-    if (isBlackLine == 1 && sensorValue[4] > 700)
-        onLine = 1;
-    if (isBlackLine == 0 && sensorValue[4] < 700)
-        onLine = 1;
-
-    sensorValue[5] = map(analogRead(A5), minValues[5], maxValues[5], 0, 1000);
-    sensorValue[5] = constrain(sensorValue[5], 0, 1000);
-    if (isBlackLine == 1 && sensorValue[5] > 700)
-        onLine = 1;
-    if (isBlackLine == 0 && sensorValue[5] < 700)
-        onLine = 1;
+        if ((isBlackLine == 1 && sensorValue[i + 1] > 700) || (isBlackLine == 0 && sensorValue[i + 1] < 700))
+        {
+            onLine = 1;
+        }
+    }
 }
 
 void loop()
 {
-
     calibrate();
     motor1.stop();
     motor2.stop();
