@@ -25,3 +25,25 @@ int PID::calcPID(int error)
     _previousError = _error;
     return _PIDValue;
 }
+
+float PID::getKP()
+{
+    return _kp;
+}
+
+float PID::getKI()
+{
+    return _ki;
+}
+
+float PID::getKD()
+{
+    return _kd;
+}
+
+void PID::setPID(float kp, float ki, float kd)
+{
+    _kp = kp;
+    _ki = ki;
+    _kd = kd;
+}

@@ -19,6 +19,10 @@ private:
 public:
     PID(float kp, float ki, float kd);
     int calcPID(int error);
+    float getKP();
+    float getKI();
+    float getKD();
+    void setPID(float kp, float ki, float kd);
 };
 
 #endif
