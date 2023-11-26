@@ -66,7 +66,12 @@ void ARRAY::calibrate() {
 
 bool ARRAY::isOnLine() {
     bool returnValue = false;
+<<<<<<< HEAD
     for (int i = 1; i < 4; i++) {
+=======
+    for (int i = 0; i < 5; i++)
+    {
+>>>>>>> e1fa7255563df730695a36112b7024141ba7fd42
         ARRAY::readSensorValue();
         IRvalues[i] = map(analogRead(i), minVals[i], maxVals[i], 0, 1000);
         IRvalues[i] = constrain(IRvalues[i], 0, 1000);
